@@ -2,6 +2,7 @@ import allure
 
 from pages.base_page import BasePage
 import locators.personal_acc_locators as personal_locators
+from locators.main_page_locators import MainPageLocators
 
 
 class PersonalAccPage(BasePage):
@@ -13,6 +14,18 @@ class PersonalAccPage(BasePage):
     def click_personal_account(self):
         self.wait_page_ready()
         self.click(personal_locators.PERSONAL_ACCOUNT_LINK)
+
+    @allure.step('Кликнуть «Выход»')
+    def click_logout(self):
+        self.wait_page_ready()
+        self.wait_url_contains('/account')
+        self.click(personal_locators.LOGOUT_BUTTON)
+
+    @allure.step('Выйти из аккаунта')
+    def logout(self):
+        self.click_logout()
+        self.wait_url_contains('/login')
+        self.is_visible(MainPageLocators.LOGIN_BUTTON)
 
     @allure.step('Дождаться открытия профиля')
     def wait_profile_opened(self):
@@ -29,10 +42,7 @@ class PersonalAccPage(BasePage):
         self.wait_page_ready()
         self.wait_url_contains('/account/order-history')
 
-    @allure.step('Нажать «Выход»')
-    def click_logout(self):
-        self.wait_page_ready()
-        self.click(personal_locators.LOGOUT_BUTTON)
+
 
     @allure.step('Дождаться редиректа на логин')
     def wait_login_opened(self):

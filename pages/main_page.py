@@ -22,3 +22,8 @@ class MainPage(BasePage):
     def click_login_button(self):
         self.wait_page_ready()
         self.click(MainPageLocators.LOGIN_BUTTON)
+
+    @allure.step('Нажать «Лента заказов»')
+    def click_order_feed(self):
+        self.click(MainPageLocators.ORDER_FEED_LINK)
+
