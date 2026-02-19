@@ -1,5 +1,4 @@
 import allure
-from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
 from locators.constructor_locators import ConstructorLocators
@@ -8,10 +7,6 @@ from locators.order_feed_locators import OrderFeedLocators
 
 
 class ConstructorPage(BasePage):
-
-    def _get_first_card_in_section(self, section_locator):
-        section = self.wait.until(EC.presence_of_element_located(section_locator))
-        return section.find_element(*ConstructorLocators.INGREDIENT_CARD)
 
     def _get_counter_from_card(self, card):
         counters = card.find_elements(*ConstructorLocators.INGREDIENT_COUNTER)
@@ -29,7 +24,7 @@ class ConstructorPage(BasePage):
     def click_order_feed_header(self):
         self.click(MainPageLocators.ORDER_FEED_BUTTON)
         self.wait_url_contains('/feed')
-        self.wait.until(EC.presence_of_element_located(OrderFeedLocators.ORDER_CARD))
+        self.wait_present(OrderFeedLocators.ORDER_CARD)
 
     @allure.step('Проверить, что открыт конструктор')
     def is_constructor_opened(self):
@@ -57,15 +52,15 @@ class ConstructorPage(BasePage):
     @allure.step('Закрыть модалку по крестику')
     def close_modal(self):
         self.click(ConstructorLocators.MODAL_CLOSE_BUTTON)
-        self.wait.until(EC.invisibility_of_element_located(ConstructorLocators.INGREDIENT_MODAL))
+        self.wait_not_visible(ConstructorLocators.INGREDIENT_MODAL)
 
     @allure.step('Проверить, что модалка ингредиента закрыта')
     def is_ingredient_modal_closed(self):
-        return self.wait.until(EC.invisibility_of_element_located(ConstructorLocators.INGREDIENT_MODAL))
+        return self.wait_not_visible(ConstructorLocators.INGREDIENT_MODAL)
 
     @allure.step('Получить каунтер первого ингредиента')
     def get_first_ingredient_counter(self):
-        card = self.wait.until(EC.presence_of_element_located(ConstructorLocators.INGREDIENT_CARD))
+        card = self.wait_present(ConstructorLocators.INGREDIENT_CARD)
         return self._get_counter_from_card(card)
 
     @allure.step('Добавить первый ингредиент в конструктор drag&drop')
@@ -92,12 +87,12 @@ class ConstructorPage(BasePage):
 
     @allure.step('Получить каунтер булки')
     def get_bun_counter(self):
-        bun_card = self.wait.until(EC.presence_of_element_located(ConstructorLocators.FIRST_BUN_CARD))
+        bun_card = self.wait_present(ConstructorLocators.FIRST_BUN_CARD)
         return self._get_counter_from_card(bun_card)
 
     @allure.step('Получить каунтер первого соуса')
     def get_sauce_counter(self):
-        sauce_card = self.wait.until(EC.presence_of_element_located(ConstructorLocators.FIRST_SAUCE_CARD))
+        sauce_card = self.wait_present(ConstructorLocators.FIRST_SAUCE_CARD)
         return self._get_counter_from_card(sauce_card)
 
     @allure.step('Оформить заказ')

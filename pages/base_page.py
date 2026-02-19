@@ -66,11 +66,19 @@ class BasePage:
     def is_visible(self, locator):
         return self.wait.until(EC.visibility_of_element_located(locator))
 
+    @allure.step('Дождаться присутствия элемента: {locator}')
+    def wait_present(self, locator):
+        return self.wait.until(EC.presence_of_element_located(locator))
+
+    @allure.step('Дождаться скрытия элемента: {locator}')
+    def wait_not_visible(self, locator):
+        return self.wait.until(EC.invisibility_of_element_located(locator))
+
     @allure.step('Перетащить элемент на элемент (seletools): {source_locator} -> {target_locator}')
     def drag_and_drop_on_element(self, source_locator, target_locator):
         self.wait_overlay_gone()
-        source = self.wait.until(EC.presence_of_element_located(source_locator))
-        target = self.wait.until(EC.presence_of_element_located(target_locator))
+        source = self.wait_present(source_locator)
+        target = self.wait_present(target_locator)
         sele_drag_and_drop(self.driver, source, target)
 
     
