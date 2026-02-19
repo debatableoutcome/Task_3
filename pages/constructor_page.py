@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
 from locators.constructor_locators import ConstructorLocators
+from locators.main_page_locators import MainPageLocators
 from locators.order_feed_locators import OrderFeedLocators
 
 
@@ -20,15 +21,24 @@ class ConstructorPage(BasePage):
         return int(text) if text.isdigit() else 0
 
     @allure.step('Нажать «Конструктор»')
-    def click_constructor_header(self, constructor_button_locator):
-        self.click(constructor_button_locator)
+    def click_constructor_header(self):
+        self.click(MainPageLocators.CONSTRUCTOR_BUTTON)
         self.is_visible(ConstructorLocators.INGREDIENTS_LIST)
 
     @allure.step('Открыть «Лента заказов»')
-    def click_order_feed_header(self, order_feed_button_locator):
-        self.click(order_feed_button_locator)
+    def click_order_feed_header(self):
+        self.click(MainPageLocators.ORDER_FEED_BUTTON)
         self.wait_url_contains('/feed')
         self.wait.until(EC.presence_of_element_located(OrderFeedLocators.ORDER_CARD))
+
+    @allure.step('Проверить, что открыт конструктор')
+    def is_constructor_opened(self):
+        self.is_visible(ConstructorLocators.INGREDIENTS_LIST)
+        return '/feed' not in self.get_current_url()
+
+    @allure.step('Проверить, что открыта лента заказов')
+    def is_order_feed_opened(self):
+        return '/feed' in self.get_current_url() and self.is_visible(OrderFeedLocators.ORDER_CARD) is not None
 
     @allure.step('Кликнуть по ингредиенту')
     def click_first_ingredient(self):
@@ -40,10 +50,18 @@ class ConstructorPage(BasePage):
         self.is_visible(ConstructorLocators.INGREDIENT_MODAL)
         self.is_visible(ConstructorLocators.INGREDIENT_MODAL_STATS)
 
+    @allure.step('Проверить, что модалка ингредиента открыта')
+    def is_ingredient_modal_opened(self):
+        return self.is_visible(ConstructorLocators.INGREDIENT_MODAL) is not None
+
     @allure.step('Закрыть модалку по крестику')
     def close_modal(self):
         self.click(ConstructorLocators.MODAL_CLOSE_BUTTON)
         self.wait.until(EC.invisibility_of_element_located(ConstructorLocators.INGREDIENT_MODAL))
+
+    @allure.step('Проверить, что модалка ингредиента закрыта')
+    def is_ingredient_modal_closed(self):
+        return self.wait.until(EC.invisibility_of_element_located(ConstructorLocators.INGREDIENT_MODAL))
 
     @allure.step('Получить каунтер первого ингредиента')
     def get_first_ingredient_counter(self):
@@ -89,3 +107,7 @@ class ConstructorPage(BasePage):
     @allure.step('Дождаться окна успешного заказа')
     def wait_order_success(self):
         self.is_visible(ConstructorLocators.ORDER_SUCCESS_TEXT)
+
+    @allure.step('Проверить, что заказ успешно создан')
+    def is_order_success_visible(self):
+        return self.is_visible(ConstructorLocators.ORDER_SUCCESS_TEXT) is not None
