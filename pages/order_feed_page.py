@@ -26,7 +26,7 @@ class OrderFeedPage(BasePage):
 
     @allure.step('Проверить, что модальное окно открыто')
     def is_modal_opened(self):
-        return self.is_visible(OrderFeedLocators.ORDER_MODAL)
+        return self.is_visible(OrderFeedLocators.ORDER_MODAL_OPENED) is not None
 
     @allure.step('Закрыть модальное окно')
     def close_modal(self):

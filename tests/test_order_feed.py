@@ -12,3 +12,4 @@ class TestOrderFeed:
         page.open_feed()
         page.click_first_order()
         page.wait_order_modal_opened()
+        assert page.is_modal_opened()
