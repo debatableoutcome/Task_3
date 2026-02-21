@@ -2,23 +2,10 @@ import allure
 
 from data.user_data import USER_DATA
 from pages.main_page import MainPage
-from pages.login_page import LoginPage
 from pages.personal_acc_page import PersonalAccPage
 from pages.constructor_page import ConstructorPage
 
 class TestMainFunctionality:
-    @staticmethod
-    def _login_as_user(driver):
-        main_page = MainPage(driver)
-        login_page = LoginPage(driver)
-        personal_page = PersonalAccPage(driver)
-
-        main_page.open()
-        personal_page.click_personal_account()
-        login_page.login(USER_DATA['EMAIL'], USER_DATA['PASSWORD'])
-        personal_page.click_personal_account()
-        personal_page.wait_profile_opened()
-
 
     @allure.title('Переход по клику на «Конструктор»')
     def test_go_to_constructor(self, driver):
@@ -77,9 +64,10 @@ class TestMainFunctionality:
     @allure.title('Залогиненный пользователь может оформить заказ')
     def test_authorized_user_can_place_order(self, driver):
         main_page = MainPage(driver)
+        personal_page = PersonalAccPage(driver)
         constructor_page = ConstructorPage(driver)
 
-        self._login_as_user(driver)
+        personal_page.open_profile_as_authorized_user(USER_DATA['EMAIL'], USER_DATA['PASSWORD'])
         main_page.open()
         constructor_page.add_first_ingredient_to_constructor()
         constructor_page.click_order()

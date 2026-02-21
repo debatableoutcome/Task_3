@@ -1,6 +1,8 @@
 import allure
 
 from pages.base_page import BasePage
+from pages.login_page import LoginPage
+from pages.main_page import MainPage
 import locators.personal_acc_locators as personal_locators
 from locators.main_page_locators import MainPageLocators
 
@@ -14,6 +16,17 @@ class PersonalAccPage(BasePage):
     def click_personal_account(self):
         self.wait_page_ready()
         self.click(personal_locators.PERSONAL_ACCOUNT_LINK)
+
+    @allure.step('Открыть профиль авторизованного пользователя')
+    def open_profile_as_authorized_user(self, email, password):
+        main_page = MainPage(self.driver)
+        login_page = LoginPage(self.driver)
+
+        main_page.open()
+        self.click_personal_account()
+        login_page.login(email, password)
+        self.click_personal_account()
+        self.wait_profile_opened()
 
     @allure.step('Кликнуть «Выход»')
     def click_logout(self):
