@@ -1,5 +1,4 @@
 import allure
-from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
 from config.urls import FEED_URL
@@ -15,7 +14,7 @@ class OrderFeedPage(BasePage):
     def open_feed(self):
         self.open(FEED_URL)
         self.wait_url_contains('/feed')
-        self.wait.until(EC.presence_of_element_located(OrderFeedLocators.ORDER_CARD))
+        self.wait_present(OrderFeedLocators.ORDER_CARD)
 
     @allure.step('Кликнуть по первому заказу')
     def click_first_order(self):
@@ -32,4 +31,4 @@ class OrderFeedPage(BasePage):
     @allure.step('Закрыть модальное окно')
     def close_modal(self):
         self.click(OrderFeedLocators.MODAL_CLOSE_BUTTON)
-        self.wait.until(EC.invisibility_of_element_located(OrderFeedLocators.ORDER_MODAL_OPENED))
+        self.wait_not_visible(OrderFeedLocators.ORDER_MODAL_OPENED)

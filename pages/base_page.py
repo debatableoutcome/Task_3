@@ -85,3 +85,7 @@ class BasePage:
     @allure.step('Получить текущий URL')
     def get_current_url(self):
         return self.driver.current_url
+
+    @allure.step('Проверить, что текущий URL содержит: {part}')
+    def current_url_contains(self, part):
+        return part in self.get_current_url()

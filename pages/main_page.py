@@ -1,5 +1,4 @@
 import allure
-from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
 from config.urls import BASE_URL
@@ -15,7 +14,7 @@ class MainPage(BasePage):
 
     @allure.step('Открыть главную страницу')
     def open(self):
-        self.driver.get(self.URL)
+        super().open(self.URL)
         self.wait_page_ready()
 
     @allure.step('Нажать кнопку «Войти в аккаунт»')

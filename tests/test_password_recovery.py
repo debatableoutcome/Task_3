@@ -12,7 +12,7 @@ class TestPasswordRecovery:
 
         page.open_page()
 
-        assert '/forgot-password' in driver.current_url
+        assert page.current_url_contains('/forgot-password')
 
 
     @allure.title('Ввод почты и клик по кнопке Восстановить')
@@ -23,7 +23,7 @@ class TestPasswordRecovery:
         page.enter_email('test@test.ru')
         page.click_restore()
 
-        assert '/reset-password' in driver.current_url
+        assert page.current_url_contains('/reset-password')
 
 
     @allure.title('Кнопка показать/скрыть пароль делает поле активным')
