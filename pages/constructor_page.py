@@ -2,8 +2,6 @@ import allure
 
 from pages.base_page import BasePage
 from locators.constructor_locators import ConstructorLocators
-from locators.main_page_locators import MainPageLocators
-from locators.order_feed_locators import OrderFeedLocators
 
 
 class ConstructorPage(BasePage):
@@ -15,25 +13,10 @@ class ConstructorPage(BasePage):
         text = counters[0].text.strip()
         return int(text) if text.isdigit() else 0
 
-    @allure.step('Нажать «Конструктор»')
-    def click_constructor_header(self):
-        self.click(MainPageLocators.CONSTRUCTOR_BUTTON)
-        self.is_visible(ConstructorLocators.INGREDIENTS_LIST)
-
-    @allure.step('Открыть «Лента заказов»')
-    def click_order_feed_header(self):
-        self.click(MainPageLocators.ORDER_FEED_BUTTON)
-        self.wait_url_contains('/feed')
-        self.wait_present(OrderFeedLocators.ORDER_CARD)
-
     @allure.step('Проверить, что открыт конструктор')
     def is_constructor_opened(self):
         self.is_visible(ConstructorLocators.INGREDIENTS_LIST)
         return '/feed' not in self.get_current_url()
-
-    @allure.step('Проверить, что открыта лента заказов')
-    def is_order_feed_opened(self):
-        return '/feed' in self.get_current_url() and self.is_visible(OrderFeedLocators.ORDER_CARD) is not None
 
     @allure.step('Кликнуть по ингредиенту')
     def click_first_ingredient(self):

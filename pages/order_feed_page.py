@@ -28,6 +28,10 @@ class OrderFeedPage(BasePage):
     def is_modal_opened(self):
         return self.is_visible(OrderFeedLocators.ORDER_MODAL_OPENED) is not None
 
+    @allure.step('Проверить, что открыта лента заказов')
+    def is_feed_opened(self):
+        return self.current_url_contains('/feed') and self.is_visible(OrderFeedLocators.ORDER_CARD) is not None
+
     @allure.step('Закрыть модальное окно')
     def close_modal(self):
         self.click(OrderFeedLocators.MODAL_CLOSE_BUTTON)

@@ -26,3 +26,7 @@ class MainPage(BasePage):
     def click_order_feed(self):
         self.click(MainPageLocators.ORDER_FEED_LINK)
 
+    @allure.step('Нажать «Конструктор»')
+    def click_constructor(self):
+        self.click(MainPageLocators.CONSTRUCTOR_LINK)
+

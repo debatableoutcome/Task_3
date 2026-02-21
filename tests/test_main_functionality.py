@@ -2,6 +2,8 @@ import allure
 
 from data.user_data import USER_DATA
 from pages.main_page import MainPage
+from pages.login_page import LoginPage
+from pages.order_feed_page import OrderFeedPage
 from pages.personal_acc_page import PersonalAccPage
 from pages.constructor_page import ConstructorPage
 
@@ -13,18 +15,18 @@ class TestMainFunctionality:
         constructor_page = ConstructorPage(driver)
 
         main_page.open()
-        constructor_page.click_constructor_header()
+        main_page.click_constructor()
 
         assert constructor_page.is_constructor_opened()
 
     @allure.title('Переход по клику на «Лента заказов»')
     def test_go_to_order_feed(self, driver):
         main_page = MainPage(driver)
-        constructor_page = ConstructorPage(driver)
+        order_feed_page = OrderFeedPage(driver)
 
         main_page.open()
-        constructor_page.click_order_feed_header()
-        assert constructor_page.is_order_feed_opened()
+        main_page.click_order_feed()
+        assert order_feed_page.is_feed_opened()
 
 
     @allure.title('Клик по ингредиенту открывает окно с деталями')
@@ -64,10 +66,15 @@ class TestMainFunctionality:
     @allure.title('Залогиненный пользователь может оформить заказ')
     def test_authorized_user_can_place_order(self, driver):
         main_page = MainPage(driver)
+        login_page = LoginPage(driver)
         personal_page = PersonalAccPage(driver)
         constructor_page = ConstructorPage(driver)
 
-        personal_page.open_profile_as_authorized_user(USER_DATA['EMAIL'], USER_DATA['PASSWORD'])
+        main_page.open()
+        personal_page.click_personal_account()
+        login_page.login(USER_DATA['EMAIL'], USER_DATA['PASSWORD'])
+        personal_page.click_personal_account()
+        personal_page.wait_profile_opened()
         main_page.open()
         constructor_page.add_first_ingredient_to_constructor()
         constructor_page.click_order()
